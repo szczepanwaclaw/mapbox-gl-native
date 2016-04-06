@@ -195,6 +195,14 @@
                 android:name="@string/category"
                 android:value="@string/category_imagegenerator" />
         </activity>
+        <activity
+            android:name=".activity.annotation.BigMarkerActivity"
+            android:description="@string/description_big_marker"
+            android:label="@string/activity_big_marker">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_annotation" />
+        </activity>
 
         <!-- Configuration Settings -->
         <meta-data
