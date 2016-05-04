@@ -196,7 +196,6 @@ public:
                           GLKViewDelegate,
                           CLLocationManagerDelegate,
                           UIActionSheetDelegate,
-                          SMCalloutViewDelegate,
                           MGLCalloutViewDelegate,
                           UIAlertViewDelegate,
                           MGLMultiPointDelegate,
@@ -1583,7 +1582,7 @@ mbgl::Duration MGLDurationInSeconds(NSTimeInterval duration)
     return [self.delegate respondsToSelector:@selector(mapView:tapOnCalloutForAnnotation:)];
 }
 
-- (void)calloutViewClicked:(__unused SMCalloutView *)calloutView
+- (void)calloutViewClicked:(__unused UIView<MGLCalloutView> *)calloutView
 {
     if ([self.delegate respondsToSelector:@selector(mapView:tapOnCalloutForAnnotation:)])
     {
@@ -3293,7 +3292,7 @@ mbgl::Duration MGLDurationInSeconds(NSTimeInterval duration)
 
 - (MGLCompactCalloutView *)calloutViewForAnnotation:(id <MGLAnnotation>)annotation
 {
-    MGLCompactCalloutView *calloutView = [MGLCompactCalloutView platformCalloutView];
+    MGLCompactCalloutView *calloutView = [MGLCompactCalloutView calloutView];
     calloutView.representedObject = annotation;
     calloutView.tintColor = self.tintColor;
 
