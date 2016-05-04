@@ -1,5 +1,9 @@
 #import <Foundation/Foundation.h>
 
+#ifdef TARGET_OS_IPHONE
+#import <UIKit/UIKit.h>
+#endif
+
 #import "MGLAnnotation.h"
 
 #import "MGLTypes.h"
@@ -14,6 +18,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** The subtitle of the shape annotation. The default value of this property is `nil`. */
 @property (nonatomic, copy, nullable) NSString *subtitle;
+
+#ifdef TARGET_OS_IPHONE
+
+@property (nonatomic) BOOL canShowCallout;
+
+@property (nonatomic, nullable) UIView *callout;
+
+#endif
 
 #if !TARGET_OS_IPHONE
 

@@ -364,6 +364,7 @@ static const CLLocationCoordinate2D WorldTourDestinations[] = {
                 MGLPointAnnotation *annotation = [MGLPointAnnotation new];
                 annotation.coordinate = coordinate;
                 annotation.title = title;
+                annotation.canShowCallout = YES;
 
                 [annotations addObject:annotation];
 
@@ -461,6 +462,7 @@ static const CLLocationCoordinate2D WorldTourDestinations[] = {
                                  toCoordinateFromView:self.mapView];
         point.title = @"Dropped Pin";
         point.subtitle = [[[MGLCoordinateFormatter alloc] init] stringFromCoordinate:point.coordinate];
+        point.canShowCallout = YES;
         [self.mapView addAnnotation:point];
         [self.mapView selectAnnotation:point animated:YES];
     }
@@ -733,35 +735,35 @@ static const CLLocationCoordinate2D WorldTourDestinations[] = {
     }];
 }
 
-- (UIView<MGLCalloutView> *)mapView:(__unused MGLMapView *)mapView calloutViewForAnnotation:(id<MGLAnnotation>)annotation
-{
-    if ([annotation respondsToSelector:@selector(title)]
-        && [annotation isKindOfClass:[MBXCustomCalloutAnnotation class]])
-    {
-        MBXCustomCalloutView *calloutView = [[MBXCustomCalloutView alloc] init];
-        calloutView.representedObject = annotation;
-        return calloutView;
-    }
-    return nil;
-}
-
-- (UIView *)mapView:(__unused MGLMapView *)mapView leftCalloutAccessoryViewForAnnotation:(__unused id<MGLAnnotation>)annotation
-{
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectZero;
-    [button setTitle:@"Left" forState:UIControlStateNormal];
-    [button sizeToFit];
-    return button;
-}
-
-- (UIView *)mapView:(__unused MGLMapView *)mapView rightCalloutAccessoryViewForAnnotation:(__unused id<MGLAnnotation>)annotation
-{
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectZero;
-    [button setTitle:@"Right" forState:UIControlStateNormal];
-    [button sizeToFit];
-    return button;
-}
+//- (UIView<MGLCalloutView> *)mapView:(__unused MGLMapView *)mapView calloutViewForAnnotation:(id<MGLAnnotation>)annotation
+//{
+//    if ([annotation respondsToSelector:@selector(title)]
+//        && [annotation isKindOfClass:[MBXCustomCalloutAnnotation class]])
+//    {
+//        MBXCustomCalloutView *calloutView = [[MBXCustomCalloutView alloc] init];
+//        calloutView.representedObject = annotation;
+//        return calloutView;
+//    }
+//    return nil;
+//}
+//
+//- (UIView *)mapView:(__unused MGLMapView *)mapView leftCalloutAccessoryViewForAnnotation:(__unused id<MGLAnnotation>)annotation
+//{
+//    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+//    button.frame = CGRectZero;
+//    [button setTitle:@"Left" forState:UIControlStateNormal];
+//    [button sizeToFit];
+//    return button;
+//}
+//
+//- (UIView *)mapView:(__unused MGLMapView *)mapView rightCalloutAccessoryViewForAnnotation:(__unused id<MGLAnnotation>)annotation
+//{
+//    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+//    button.frame = CGRectZero;
+//    [button setTitle:@"Right" forState:UIControlStateNormal];
+//    [button sizeToFit];
+//    return button;
+//}
 
 - (void)mapView:(MGLMapView *)mapView tapOnCalloutForAnnotation:(id <MGLAnnotation>)annotation
 {
