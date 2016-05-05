@@ -446,9 +446,11 @@ static const CLLocationCoordinate2D WorldTourDestinations[] = {
     [self.mapView removeAnnotations:self.mapView.annotations];
     
     MBXCustomCalloutAnnotation *annotation = [[MBXCustomCalloutAnnotation alloc] init];
-    annotation.coordinate = CLLocationCoordinate2DMake(48.8533940, 2.3775439);
+    annotation.coordinate = CLLocationCoordinate2DMake(38.904722, -77.016389);//CLLocationCoordinate2DMake(48.8533940, 2.3775439);
     annotation.title = @"Custom Callout";
-    
+    annotation.canShowCallout = YES;
+    annotation.calloutView = [[MBXCustomCalloutView alloc] init];
+
     [self.mapView addAnnotation:annotation];
     [self.mapView showAnnotations:@[annotation] animated:YES];
 }
@@ -684,11 +686,6 @@ static const CLLocationCoordinate2D WorldTourDestinations[] = {
     NSString *lastTwoCharacters = [title substringFromIndex:title.length - 2];
     MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:lastTwoCharacters];
     annotationImage.image = annotationImage.image ? nil : [self imageWithText:lastTwoCharacters backgroundColor:[UIColor grayColor]];
-}
-
-- (BOOL)mapView:(__unused MGLMapView *)mapView annotationCanShowCallout:(__unused id <MGLAnnotation>)annotation
-{
-    return YES;
 }
 
 - (CGFloat)mapView:(__unused MGLMapView *)mapView alphaForShapeAnnotation:(MGLShape *)annotation

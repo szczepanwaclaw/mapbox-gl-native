@@ -4,6 +4,7 @@
 
 #ifdef TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#import "MGLCalloutView.h"
 #endif
 
 #import "MGLTypes.h"
@@ -44,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) BOOL canShowCallout;
 
-@property (nonatomic, nullable) UIView *callout;
+@property (nonatomic, nullable) UIView <MGLCalloutView> *calloutView;
 
 #endif
 

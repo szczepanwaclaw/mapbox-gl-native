@@ -12,6 +12,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol MGLCalloutView <NSObject>
 
+/**
+ Presents a callout view by adding it to `inView` and pointing at the given rect of `inView`’s bounds. Constrains the callout to the bounds of the given view.
+ */
+- (void)presentCalloutFromRect:(CGRect)rect inView:(UIView *)view constrainedToView:(UIView *)constrainedView animated:(BOOL)animated;
+
+/**
+ Dismisses the callout view.
+ */
+- (void)dismissCalloutAnimated:(BOOL)animated;
+
+@optional
+
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *subtitle;
 
@@ -26,19 +38,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIView *rightAccessoryView;
 
 @property (nonatomic, strong) UIView *detailAccessoryView;
-
-
-/**
- Presents a callout view by adding it to `inView` and pointing at the given rect of `inView`’s bounds. Constrains the callout to the bounds of the given view.
- */
-- (void)presentCalloutFromRect:(CGRect)rect inView:(UIView *)view constrainedToView:(UIView *)constrainedView animated:(BOOL)animated;
-
-/**
- Dismisses the callout view.
- */
-- (void)dismissCalloutAnimated:(BOOL)animated;
-
-@optional
 
 /**
  An object conforming to the `MGLCalloutViewDelegate` method that receives messages related to the callout view’s interactive subviews.
