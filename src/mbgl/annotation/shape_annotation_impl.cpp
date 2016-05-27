@@ -144,7 +144,7 @@ void ShapeAnnotationImpl::updateTile(const CanonicalTileID& tileID, AnnotationTi
         }
 
         layer.features.emplace_back(
-            std::make_shared<AnnotationTileFeature>(featureType, renderGeometry));
+            std::make_shared<AnnotationTileFeature>(id, featureType, renderGeometry));
     }
 }
 

@@ -153,8 +153,6 @@ public:
     void removeAnnotation(AnnotationID);
     void removeAnnotations(const AnnotationIDs&);
 
-    AnnotationIDs getPointAnnotationsInBounds(const LatLngBounds&);
-
     void addCustomLayer(const std::string& id,
                         CustomLayerInitializeFunction,
                         CustomLayerRenderFunction,
@@ -166,6 +164,7 @@ public:
     // Feature queries
     std::vector<Feature> queryRenderedFeatures(const ScreenCoordinate&, const optional<std::vector<std::string>>& layerIDs = {});
     std::vector<Feature> queryRenderedFeatures(const ScreenBox&,        const optional<std::vector<std::string>>& layerIDs = {});
+    AnnotationIDs queryPointAnnotations(const ScreenBox&);
 
     // Memory
     void setSourceTileCacheSize(size_t);

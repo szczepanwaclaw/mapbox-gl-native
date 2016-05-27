@@ -30,8 +30,6 @@ public:
     void updatePointAnnotation(const AnnotationID&, const PointAnnotation&, const uint8_t maxZoom);
     void removeAnnotations(const AnnotationIDs&);
 
-    AnnotationIDs getPointAnnotationsInBounds(const LatLngBounds&) const;
-
     void addIcon(const std::string& name, std::shared_ptr<const SpriteImage>);
     void removeIcon(const std::string& name);
     double getTopOffsetPixelsForIcon(const std::string& name);

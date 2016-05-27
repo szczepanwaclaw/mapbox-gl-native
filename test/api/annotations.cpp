@@ -272,10 +272,20 @@ TEST(Annotations, QueryRenderedFeatures) {
     map.addAnnotationIcon("default_marker", namedMarker("default_marker.png"));
     const LatLng latLng(0, 0);
     map.addPointAnnotation(PointAnnotation(latLng, "default_marker"));
+    const LatLng latLng2(50, 0);
+    map.addPointAnnotation(PointAnnotation(latLng2, "default_marker"));
 
     test::render(map);
     
     auto point = map.pixelForLatLng(latLng);
     auto features = map.queryRenderedFeatures(point);
     EXPECT_EQ(features.size(), 1);
+    EXPECT_TRUE(!!features[0].id);
+    EXPECT_EQ(*features[0].id, 0);
+    
+    auto point2 = map.pixelForLatLng(latLng2);
+    auto features2 = map.queryRenderedFeatures(point2);
+    EXPECT_EQ(features2.size(), 1);
+    EXPECT_TRUE(!!features2[0].id);
+    EXPECT_EQ(*features2[0].id, 1);
 }

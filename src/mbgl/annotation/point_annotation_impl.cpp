@@ -28,7 +28,8 @@ void PointAnnotationImpl::updateLayer(const CanonicalTileID& tileID, AnnotationT
     projected *= double(util::EXTENT);
 
     layer.features.emplace_back(
-        std::make_shared<const AnnotationTileFeature>(FeatureType::Point,
+        std::make_shared<const AnnotationTileFeature>(id,
+                                                      FeatureType::Point,
                                                       GeometryCollection {{ {{ convertPoint<int16_t>(projected) }} }},
                                                       featureProperties));
 }

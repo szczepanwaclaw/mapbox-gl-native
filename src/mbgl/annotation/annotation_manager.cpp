@@ -71,17 +71,6 @@ void AnnotationManager::removeAnnotations(const AnnotationIDs& ids) {
     }
 }
 
-AnnotationIDs AnnotationManager::getPointAnnotationsInBounds(const LatLngBounds& bounds) const {
-    AnnotationIDs result;
-
-    pointTree.query(boost::geometry::index::intersects(bounds),
-        boost::make_function_output_iterator([&](const auto& val){
-            result.push_back(val->id);
-        }));
-
-    return result;
-}
-
 std::unique_ptr<AnnotationTile> AnnotationManager::getTile(const CanonicalTileID& tileID) {
     if (pointAnnotations.empty() && shapeAnnotations.empty())
         return nullptr;
