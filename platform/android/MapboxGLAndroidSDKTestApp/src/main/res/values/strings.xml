@@ -34,6 +34,9 @@
     <string name="activity_directions">Directions</string>
     <string name="activity_geocoder">Geocoder</string>
 
+    <!-- Navigation -->
+    <string name="activity_location_picker">Location Picker</string>
+
     <!-- Other -->
     <string name="activity_double_map">Double Map Activity</string>
     <string name="activity_back_to_map">Back to map activity</string>
@@ -80,6 +83,7 @@
     <string name="description_doublemap">2 maps in a view hierarchy</string>
     <string name="description_back_to_map">Restart map view after temporarily leaving to another activity</string>
     <string name="description_view_marker">Use an Android SDK View as marker</string>
+    <string name="description_location_picker">Use a fixed Marker to select your location</string>
 
     <string name="menuitem_title_concurrent_infowindow">Concurrent Open InfoWindows</string>
     <string name="menuitem_title_deselect_markers_on_tap">Deselect Markers On Tap</string>
@@ -99,6 +103,7 @@
     <string name="category_maplayout">Map Layout</string>
     <string name="category_offline">Offline</string>
     <string name="category_userlocation">User Location</string>
+    <string name="category_navigation">Navigation</string>
 
     <string name="action_visible_bounds_explanation">Center map around 2 markers</string>
     <string name="action_remove_polylines">Remove polylines</string>
