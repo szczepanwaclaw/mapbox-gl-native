@@ -16,9 +16,8 @@ public:
     uint8_t minZoom = 0;
     uint8_t maxZoom = 22;
     std::string attribution;
-    LatLng center;
-    double zoom = 0;
-    LatLngBounds bounds = LatLngBounds::world();
+
+    // TileJSON also includes center, zoom, and bounds, but they are not used by mbgl.
 };
 
 } // namespace mbgl

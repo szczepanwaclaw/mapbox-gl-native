@@ -79,27 +79,6 @@ void parseTileJSONMember(const JSValue& value, uint8_t& target, const char* name
     target = uint;
 }
 
-void parseTileJSONMember(const JSValue& value, std::array<double, 4>& target, const char* name) {
-    if (!value.HasMember(name)) {
-        return;
-    }
-
-    const JSValue& property = value[name];
-    if (!property.IsArray() || property.Size() > 4) {
-        return;
-    }
-
-    for (rapidjson::SizeType i = 0; i < property.Size(); i++) {
-        if (!property[i].IsNumber()) {
-            return;
-        }
-    }
-
-    for (rapidjson::SizeType i = 0; i < property.Size(); i++) {
-        target[i] = property[i].GetDouble();
-    }
-}
-
 } // end namespace
 
 Parser::~Parser() = default;
@@ -288,14 +267,6 @@ std::unique_ptr<Tileset> parseTileJSON(const JSValue& value) {
     parseTileJSONMember(value, tileset->minZoom, "minzoom");
     parseTileJSONMember(value, tileset->maxZoom, "maxzoom");
     parseTileJSONMember(value, tileset->attribution, "attribution");
-
-    std::array<double, 4> array;
-    parseTileJSONMember(value, array, "center");
-    tileset->center = { array[0], array[1] };
-    tileset->zoom = array[2];
-    parseTileJSONMember(value, array, "bounds");
-    tileset->bounds = LatLngBounds::hull({ array[0], array[1] }, { array[2], array[3] });
-
     return tileset;
 }
 
