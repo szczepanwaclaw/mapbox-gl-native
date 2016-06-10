@@ -36,6 +36,12 @@
 #define TEST_REQUIRES_SERVER(name) DISABLED_ ## name
 #endif
 
+#if NDEBUG && __linux__
+#define TEST_REQUIRES_LINUX_RELEASE(name) name
+#else
+#define TEST_REQUIRES_LINUX_RELEASE(name) DISABLED_ ## name
+#endif
+
 #include <mbgl/util/image.hpp>
 #include <mbgl/util/chrono.hpp>
 
