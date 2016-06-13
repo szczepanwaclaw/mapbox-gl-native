@@ -178,10 +178,12 @@ public class LocationPickerActivity extends AppCompatActivity {
             return;
         }
 
+        float x = dropPinView.getLeft() + (dropPinView.getWidth() / 2);
+        float y = dropPinView.getTop() + (dropPinView.getHeight() / 2);
+        LatLng latLng = mapboxMap.getProjection().fromScreenLocation(new PointF(x, y));
+
         dropPinView.setVisibility(View.GONE);
 
-        float[] coords = getDropPinTipCoordinates();
-        LatLng latLng = mapboxMap.getProjection().fromScreenLocation(new PointF(coords[0], coords[1]));
 
         MarkerOptions markerOptions = new MarkerOptions().title(address).position(latLng);
         resultsPin = mapboxMap.addMarker(markerOptions);
