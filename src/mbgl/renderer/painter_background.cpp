@@ -62,46 +62,24 @@ void Painter::renderBackground(const BackgroundLayer& layer) {
     config.depthMask = GL_FALSE;
     setDepthSublayer(0);
 
-    auto tileIDs = util::tileCover(state, state.getIntegerZoom());
-
-    for (auto& id : tileIDs) {
+    for (const auto& tileID : util::tileCover(state, state.getIntegerZoom())) {
         mat4 vtxMatrix;
-        state.matrixFor(vtxMatrix, id);
+        state.matrixFor(vtxMatrix, tileID);
         matrix::multiply(vtxMatrix, projMatrix, vtxMatrix);
 
         if (isPatterned) {
             patternShader->u_matrix = vtxMatrix;
+            patternShader->u_pattern_size_a = {{ (*imagePosA).size[0], (*imagePosA).size[1] }};
+            patternShader->u_pattern_size_b = {{ (*imagePosB).size[0], (*imagePosB).size[1] }};
+            patternShader->u_scale_a = properties.backgroundPattern.value.fromScale;
+            patternShader->u_scale_b = properties.backgroundPattern.value.toScale;
+            patternShader->u_tile_units_to_pixels = 1.0f / tileID.pixelsToTileUnits(1.0f, state.getIntegerZoom());
 
-            std::array<int, 2> imageSizeScaledA = {{
-                (int)((*imagePosA).size[0] * properties.backgroundPattern.value.fromScale),
-                (int)((*imagePosA).size[1] * properties.backgroundPattern.value.fromScale)
-            }};
-            std::array<int, 2> imageSizeScaledB = {{
-                (int)((*imagePosB).size[0] * properties.backgroundPattern.value.toScale),
-                (int)((*imagePosB).size[1] * properties.backgroundPattern.value.toScale)
-            }};
-
-            patternShader->u_patternscale_a = {{
-                1.0f / id.pixelsToTileUnits(imageSizeScaledA[0], state.getIntegerZoom()),
-                1.0f / id.pixelsToTileUnits(imageSizeScaledA[1], state.getIntegerZoom())
-            }};
-            patternShader->u_patternscale_b = {{
-                1.0f / id.pixelsToTileUnits(imageSizeScaledB[0], state.getIntegerZoom()),
-                1.0f / id.pixelsToTileUnits(imageSizeScaledB[1], state.getIntegerZoom())
-            }};
-
-            float offsetAx = (std::fmod(util::tileSize, imageSizeScaledA[0]) * id.canonical.x) /
-                             (float)imageSizeScaledA[0];
-            float offsetAy = (std::fmod(util::tileSize, imageSizeScaledA[1]) * id.canonical.y) /
-                             (float)imageSizeScaledA[1];
-
-            float offsetBx = (std::fmod(util::tileSize, imageSizeScaledB[0]) * id.canonical.x) /
-                             (float)imageSizeScaledB[0];
-            float offsetBy = (std::fmod(util::tileSize, imageSizeScaledB[1]) * id.canonical.y) /
-                             (float)imageSizeScaledB[1];
-
-            patternShader->u_offset_a = std::array<float, 2>{{offsetAx, offsetAy}};
-            patternShader->u_offset_b = std::array<float, 2>{{offsetBx, offsetBy}};
+            GLint tileSizeAtNearestZoom = util::tileSize * state.zoomScale(state.getIntegerZoom() - tileID.canonical.z);
+            GLint pixelX = tileSizeAtNearestZoom * (tileID.canonical.x + tileID.wrap * state.zoomScale(tileID.canonical.z));
+            GLint pixelY = tileSizeAtNearestZoom * tileID.canonical.y;
+            patternShader->u_pixel_coord_upper = {{ float(pixelX >> 16), float(pixelY >> 16) }};
+            patternShader->u_pixel_coord_lower = {{ float(pixelX & 0xFFFF), float(pixelY & 0xFFFF) }};
         } else {
             plainShader->u_matrix = vtxMatrix;
         }
