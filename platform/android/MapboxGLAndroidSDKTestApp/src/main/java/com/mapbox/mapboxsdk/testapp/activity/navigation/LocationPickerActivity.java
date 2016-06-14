@@ -1,6 +1,8 @@
 package com.mapbox.mapboxsdk.testapp.activity.navigation;
 
+import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -65,27 +67,6 @@ public class LocationPickerActivity extends AppCompatActivity {
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
 
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(MapboxMap map) {
-                mapboxMap = map;
-                mapboxMap.setMyLocationEnabled(true);
-                mapboxMap.setOnMyLocationChangeListener(new MapboxMap.OnMyLocationChangeListener() {
-                    @Override
-                    public void onMyLocationChange(@Nullable Location location) {
-                        if (location != null) {
-                            mapboxMap.setCameraPosition(new CameraPosition.Builder()
-                                    .target(new LatLng(location))
-                                    .zoom(16)
-                                    .bearing(0)
-                                    .tilt(0)
-                                    .build());
-                            mapboxMap.setOnMyLocationChangeListener(null);
-                        }
-                    }
-                });
-            }
-        });
 
         dropPinView = new ImageView(this);
         dropPinView.setImageResource(R.drawable.default_marker);
@@ -115,6 +96,62 @@ public class LocationPickerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showAddressPin(null);
+            }
+        });
+
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(MapboxMap map) {
+                mapboxMap = map;
+                mapboxMap.setMyLocationEnabled(true);
+                mapboxMap.setOnMyLocationChangeListener(new MapboxMap.OnMyLocationChangeListener() {
+                    @Override
+                    public void onMyLocationChange(@Nullable Location location) {
+                        if (location != null) {
+                            mapboxMap.setCameraPosition(new CameraPosition.Builder()
+                                    .target(new LatLng(location))
+                                    .zoom(16)
+                                    .bearing(0)
+                                    .tilt(0)
+                                    .build());
+                            mapboxMap.setOnMyLocationChangeListener(null);
+                        }
+                    }
+                });
+
+                // Setup User Location Monitor
+                mapboxMap.setOnCameraChangeListener(new MapboxMap.OnCameraChangeListener() {
+                    @Override
+                    public void onCameraChange(CameraPosition position) {
+
+                        if (mapboxMap.isMyLocationEnabled()) {
+                            // Get Geo Coordinates of Selection Pin
+//                            float[] dptc = getDropPinTipCoordinates();
+                            float x = dropPinView.getLeft() + (dropPinView.getWidth() / 2);
+                            float y = dropPinView.getBottom() - (dropPinView.getHeight() / 2);
+                            LatLng pinCoords = mapboxMap.getProjection().fromScreenLocation(new PointF(x, y));
+
+                            // Get Geo Coordinates of User Location
+                            LatLng userCoords = new LatLng(mapboxMap.getMyLocation());
+
+                            double distanceInMeters = pinCoords.distanceTo(userCoords);
+
+                            // Radius of User Dot
+                            float metersPerPixel = (float) mapboxMap.getProjection().getMetersPerPixelAtLatitude(pinCoords.getLatitude());
+
+                            // Number of Pixels of User Dot
+                            int widthOfUserDot = mapboxMap.getMyLocationViewSettings().getForegroundDrawable().getIntrinsicWidth();
+
+                            // Radius In Meters
+                            float range = (metersPerPixel * widthOfUserDot);
+                            Log.i(TAG, "DistanceInMeters = " + distanceInMeters + "; range = " + range);
+
+                            if (distanceInMeters <= range) {
+                                Log.i(TAG, "Select Pin and User Location overlap");
+                            }
+                        }
+                    }
+                });
             }
         });
     }
