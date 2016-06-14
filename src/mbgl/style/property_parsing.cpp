@@ -39,7 +39,21 @@ optional<std::string> parseConstant(const char* name, const JSValue& value) {
 
 template <>
 optional<Color> parseConstant(const char* name, const JSValue& value) {
-    if (!value.IsString()) {
+    if (value.IsArray() && value.Size() == 4 &&
+            value[rapidjson::SizeType(0)].IsNumber() &&
+            value[rapidjson::SizeType(1)].IsNumber() &&
+            value[rapidjson::SizeType(2)].IsNumber() &&
+            value[rapidjson::SizeType(3)].IsNumber()) {
+
+        float first = value[rapidjson::SizeType(0)].GetDouble();
+        float second = value[rapidjson::SizeType(1)].GetDouble();
+        float third = value[rapidjson::SizeType(2)].GetDouble();
+        float fourth = value[rapidjson::SizeType(3)].GetDouble();
+        return { {{ first, second, third, fourth }} };
+    } else if (value.IsArray()) {
+        Log::Warning(Event::ParseStyle, "value of '%s' must be an array of four numbers", name);
+        return {};
+    } else if (!value.IsString()) {
         Log::Warning(Event::ParseStyle, "value of '%s' must be a string", name);
         return {};
     }
