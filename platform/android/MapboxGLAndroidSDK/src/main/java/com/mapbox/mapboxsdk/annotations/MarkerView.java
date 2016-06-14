@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 /**
@@ -42,6 +43,7 @@ public class MarkerView extends Marker {
     private Icon markerViewIcon;
 
     private boolean selected;
+    private boolean animating;
 
     /**
      * Publicly hidden default constructor
@@ -337,6 +339,21 @@ public class MarkerView extends Marker {
     public void setMapboxMap(MapboxMap mapboxMap) {
         super.setMapboxMap(mapboxMap);
         markerViewManager = mapboxMap.getMarkerViewManager();
+    }
+
+    public void setPosition(LatLng position, boolean animated) {
+        if(markerViewManager!=null){
+            markerViewManager.animatePosition(this, position);
+        }
+//        super.setPosition(position);
+    }
+
+    public boolean isAnimating() {
+        return animating;
+    }
+
+    public void setAnimating(boolean animating) {
+        this.animating = animating;
     }
 
     /**

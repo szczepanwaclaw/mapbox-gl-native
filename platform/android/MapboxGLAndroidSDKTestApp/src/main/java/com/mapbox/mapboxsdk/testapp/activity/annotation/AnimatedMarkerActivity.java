@@ -3,6 +3,7 @@ package com.mapbox.mapboxsdk.testapp.activity.annotation;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.MarkerView;
+import com.mapbox.mapboxsdk.annotations.MarkerViewOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -43,23 +47,37 @@ public class AnimatedMarkerActivity extends AppCompatActivity {
             @Override
             public void onMapReady(@NonNull final MapboxMap mapboxMap) {
                 LatLng brussels = new LatLng(50.900446, 4.485251);
-                LatLng washington = new LatLng(38.897108, -77.036716);
+                final LatLng utrecht = new LatLng(52.086224, 5.122309);
 
-                final Marker marker = mapboxMap.addMarker(new MarkerOptions().position(brussels));
-                ValueAnimator markerAnimator = ValueAnimator.ofObject(new LatLngEvaluator(), (Object[]) new LatLng[]{brussels, washington});
-                markerAnimator.setDuration(5000);
-                markerAnimator.setRepeatCount(ValueAnimator.INFINITE);
-                markerAnimator.setRepeatMode(ValueAnimator.REVERSE);
-                markerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-                markerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                final MarkerView marker = mapboxMap.addMarker(new MarkerViewOptions()
+                        .position(brussels)
+                        .icon(IconFactory.getInstance(mMapView.getContext()).fromResource(R.drawable.ic_chelsea))
+                );
+
+                mMapView.postDelayed(new Runnable() {
                     @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        if (marker != null) {
-                            marker.setPosition((LatLng) animation.getAnimatedValue());
-                        }
+                    public void run() {
+                        marker.setPosition(utrecht, true);
                     }
-                });
-                markerAnimator.start();
+                },2000);
+
+//
+//
+//
+//                ValueAnimator markerAnimator = ValueAnimator.ofObject(new LatLngEvaluator(), (Object[]) new LatLng[]{brussels, washington});
+//                markerAnimator.setDuration(5000);
+//                markerAnimator.setRepeatCount(ValueAnimator.INFINITE);
+//                markerAnimator.setRepeatMode(ValueAnimator.REVERSE);
+//                markerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+//                markerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                    @Override
+//                    public void onAnimationUpdate(ValueAnimator animation) {
+//                        if (marker != null) {
+//                            marker.setPosition((LatLng) animation.getAnimatedValue());
+//                        }
+//                    }
+//                });
+//                markerAnimator.start();
             }
         });
     }
@@ -109,17 +127,5 @@ public class AnimatedMarkerActivity extends AppCompatActivity {
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
-    }
-
-    private class LatLngEvaluator implements TypeEvaluator<LatLng> {
-
-        private LatLng mLatLng = new LatLng();
-
-        @Override
-        public LatLng evaluate(float fraction, LatLng startValue, LatLng endValue) {
-            mLatLng.setLatitude(startValue.getLatitude() + (endValue.getLatitude() - startValue.getLatitude()) * fraction);
-            mLatLng.setLongitude(startValue.getLongitude() + (endValue.getLongitude() - startValue.getLongitude()) * fraction);
-            return mLatLng;
-        }
     }
 }
