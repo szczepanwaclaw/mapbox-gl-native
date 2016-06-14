@@ -1,8 +1,6 @@
 package com.mapbox.mapboxsdk.testapp.activity.navigation;
 
-import android.graphics.Color;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -104,6 +102,7 @@ public class LocationPickerActivity extends AppCompatActivity {
             public void onMapReady(MapboxMap map) {
                 mapboxMap = map;
                 mapboxMap.setMyLocationEnabled(true);
+                mapboxMap.getMyLocationViewSettings().setAccuracyAlpha(0);
                 mapboxMap.setOnMyLocationChangeListener(new MapboxMap.OnMyLocationChangeListener() {
                     @Override
                     public void onMyLocationChange(@Nullable Location location) {
@@ -126,7 +125,6 @@ public class LocationPickerActivity extends AppCompatActivity {
 
                         if (mapboxMap.isMyLocationEnabled()) {
                             // Get Geo Coordinates of Selection Pin
-//                            float[] dptc = getDropPinTipCoordinates();
                             float x = dropPinView.getLeft() + (dropPinView.getWidth() / 2);
                             float y = dropPinView.getBottom() - (dropPinView.getHeight() / 2);
                             LatLng pinCoords = mapboxMap.getProjection().fromScreenLocation(new PointF(x, y));
